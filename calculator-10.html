@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The ICTLAB - Futures Calculator</title>
+<style>
+:root{--bg:#0e1116;--pn:#171c24;--ln:#2a3240;--tx:#e8edf3;--mu:#8a96a6;--g:#3ddc84;--r:#ff5c5c;--y:#f2c14e}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:560px;padding:12px;background:var(--bg);color:var(--tx);font:14px/1.4 "Segoe UI",Roboto,sans-serif}
+label{color:var(--mu);font-size:12px;display:block;margin-bottom:3px}
+input,button{width:100%;background:var(--pn);color:var(--tx);border:1px solid var(--ln);border-radius:6px;padding:10px;font:inherit}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.sd{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.sd button{font-weight:700;padding:12px;opacity:.55}
+.sd button.on{opacity:1;color:#06210f}#bL.on{background:var(--g);border-color:var(--g)}#bS.on{background:var(--r);border-color:var(--r);color:#fff}
+#res{display:none;background:var(--pn);border:1px solid var(--ln);border-radius:8px;padding:6px 8px;margin:4px 0 10px}
+#res h3{margin:10px 0 2px;color:var(--y)}
+#res div{display:grid;grid-template-columns:1.2fr 1fr;padding:6px 0;border-bottom:1px solid var(--ln)}
+#res div:last-child{border:0}#res span:last-child{text-align:right;font-variant-numeric:tabular-nums}
+#chip{display:none;background:var(--pn);border:1px solid var(--ln);border-radius:6px;padding:8px;margin-bottom:10px;font-size:13px}
+#chip button{width:auto;padding:4px 10px;margin-top:6px;font-size:12px}
+#cr{max-height:200px;overflow-y:auto;background:var(--pn);border:1px solid var(--ln);border-radius:6px;margin-top:4px;display:none}
+#cr div{padding:9px;display:flex;justify-content:space-between;border-bottom:1px solid var(--ln)}#cr small{color:var(--mu)}
+.lv2{display:flex;gap:6px;margin-top:6px}.lv2 button{padding:6px;font-size:13px}
+#mM.on,#mR.on{background:var(--y);border-color:var(--y)}
+.lv{display:flex;gap:6px;margin-top:6px}.lv button{padding:6px;font-size:13px}
+input[type=range]{padding:0;accent-color:#3ddc84}
+/*brand*/.top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}.soc{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}.soc a{width:30px;height:30px;border-radius:50%;background:var(--pn);border:1px solid var(--ln);display:flex;align-items:center;justify-content:center;color:var(--tx)}.soc a:hover{border-color:var(--g);color:var(--g)}.soc svg{width:14px;height:14px;fill:currentColor}
+.br{font-weight:800;letter-spacing:1.5px;font-size:16px;margin:2px 0 12px}.br span{color:var(--g)}.br small{display:block;font-weight:400;letter-spacing:0;font-size:11px;color:var(--mu);margin-top:2px}
+.ad{background:var(--pn);border:1px solid var(--ln);border-radius:10px;padding:12px;margin:14px 0}.ad .hd{display:flex;align-items:center;gap:10px;margin-bottom:6px}.ad img{height:26px;width:auto}.plg{font-weight:800;font-size:20px;letter-spacing:-.5px}.ad p{margin:6px 0;font-size:13px}.ad ul{margin:6px 0 10px 18px;padding:0;font-size:13px;color:var(--mu)}.ad a.cta{display:block;text-align:center;background:var(--g);color:#06210f;font-weight:700;border-radius:6px;padding:11px;text-decoration:none}.ad .offer{background:#10281a;border:1px solid var(--g);border-radius:6px;padding:8px;margin:8px 0;font-size:13px;color:var(--g);font-weight:600}.ad small{display:block;color:var(--mu);font-size:11px;margin-top:8px}
+h3{font-size:13px;color:var(--mu);margin:12px 0 4px;font-weight:600}
+.w{background:#3a2d12;border:1px solid var(--y);border-radius:6px;padding:8px;margin-bottom:8px;font-size:13px}
+.g{color:var(--g)}.r{color:var(--r)}
+p.n{color:var(--mu);font-size:11px;margin-top:12px}
+</style></head><body>
+<div class="top"><div class="br">THE ICT<span>LAB</span><small>Futures Calculator</small></div>
+<div class="soc">
+<a href="https://x.com/fx_rishi" target="_blank" rel="noopener" aria-label="X (Twitter)"><svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+<a href="https://www.instagram.com/the_ict_lab" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="17" height="17" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.3" cy="6.7" r="1.2"/></svg></a>
+<a href="https://discord.gg/uxehfhGqB" target="_blank" rel="noopener" aria-label="Discord"><svg viewBox="0 0 24 24"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg></a>
+<a href="https://t.me/fx_rishi" target="_blank" rel="noopener" aria-label="Telegram"><svg viewBox="0 0 24 24"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg></a>
+</div></div>
+<div class="sd"><button id="bL" class="on">Long (Buy)</button><button id="bS">Short (Sell)</button></div>
+<label for="cs">Coin (Hyperliquid)</label>
+<input id="cs" autocomplete="off" placeholder="Search coin (e.g. btc, eth, pepe)">
+<div class="lv" style="margin-top:6px"><button data-q="us100">US100</button><button data-q="us500">US500</button><button data-q="gold">Gold</button><button data-q="btc">BTC</button><button data-q="eth">ETH</button></div>
+<div id="cr"></div>
+<div id="chip"></div>
+<label for="lev" style="margin-top:10px">Leverage: <b id="lv" style="color:var(--tx)">5x</b></label>
+<input id="lev" type="range" min="1" max="50" step="1" value="5">
+<div class="lv"><button data-l="1">1x</button><button data-l="3">3x</button><button data-l="5">5x</button><button data-l="10">10x</button><button data-l="max">Max</button></div>
+<div class="sd" style="margin-top:12px"><button id="mM" class="on">Margin amount</button><button id="mR">Risk % of capital</button></div>
+<div id="rk" style="display:none;margin-bottom:10px"><label for="rp">Risk per trade (% of your total capital)</label><input id="rp" type="number" step="0.05" inputmode="decimal" value="0.5"><div class="lv2"><button data-r="0.25">0.25%</button><button data-r="0.5">0.5%</button><button data-r="1">1%</button><button data-r="2">2%</button></div></div>
+<div class="row">
+<div style="grid-column:1/-1"><label for="cap" id="capl">Capital / margin (USDT)</label><input id="cap" type="number" inputmode="decimal" value="100"></div>
+<div><label for="fee">Entry fee (%) - opening order</label><input id="fee" type="number" step="0.001" inputmode="decimal" value="0.045"></div>
+<div><label for="fx">Exit fee (%) - closing order</label><input id="fx" type="number" step="0.001" inputmode="decimal" value="0.015"></div>
+<div><label for="en">Entry price</label><input id="en" type="number" inputmode="decimal"></div>
+<div><label for="ex">Exit price</label><input id="ex" type="number" inputmode="decimal"></div>
+<div><label for="sl">Stop loss price</label><input id="sl" type="number" inputmode="decimal"></div>
+<div><label for="tp">Target price</label><input id="tp" type="number" inputmode="decimal"></div>
+</div>
+<div id="ws"></div>
+<div id="res"></div><div id="ft"></div>
+<div class="ad">
+<div class="hd"><img src="propr-logo.png" alt="Proprxyz" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'"><span class="plg" style="display:none">proprxyz</span><b>Proprxyz Prop Firm</b></div>
+<p>Trade crypto perpetual futures on Hyperliquid with a funded account from Proprxyz, even if you don't have big capital of your own.</p>
+<div class="offer">Offer: Buy 1 Classic account and get a free Turbo account of the same size.</div>
+<ul><li>Daily payout</li><li>No consistency rule</li><li>Check the latest rules and plans on Proprxyz before you buy</li></ul>
+<a class="cta" href="https://app.propr.xyz/r/ICTLAB" target="_blank" rel="noopener sponsored">View Proprxyz accounts</a>
+<p style="margin-top:10px;color:var(--mu)">Need any help? Contact me on social media using the icons at the top.</p>
+<small>Affiliate link: if you buy through it, I may earn a commission at no extra cost to you. This is not financial advice. Challenge fees may be non-refundable and challenges are hard, so only pay what you can afford to lose.</small>
+</div>
+<p class="n">Isolated margin is assumed. The liquidation price is an estimate based on Hyperliquid's formula (maintenance margin is taken from the coin's max leverage), so the real number can differ slightly. The fee is charged twice: once when you open the trade (entry) and once when you close it (exit). There are two fee boxes: the entry fee is charged on the order that opens the trade (usually a market order, taker) and the exit fee on the order that closes it (usually a limit order, maker). Defaults for crypto are 0.045% entry + 0.015% exit (0.06% total), and 0.0675% + 0.0225% (0.09% total) for non-crypto markets. The stop loss and target exits both use the exit fee box. Change the boxes if your fees differ. Funding fees are not included. This is only a calculator, not financial advice.</p>
+<script>
+const API='https://api.hyperliquid.xyz/info',$=id=>document.getElementById(id);
+function compute(I){
+ const{cap,lev,en,ex,sl,tp,feeE,feeX,side,ml,sd,mode,rp}=I,mmr=1/(2*ml),W=[],qmax=cap*lev/en;
+ let qty,notional,margin,riskAmt=null,capped=false;
+ if(mode==='risk'){riskAmt=cap*rp/100;
+  if(!(sl>0&&(side>0?sl<en:sl>en)))return{need:'Enter a valid stop loss price ('+(side>0?'below':'above')+' entry) to calculate the quantity.',W,riskAmt};
+  qty=riskAmt/(Math.abs(en-sl)+feeE*en+feeX*sl);
+  if(qty>qmax){qty=qmax;capped=true;W.push('At '+lev+'x leverage your capital can only open a smaller position, so the loss at stop loss will be less than your target risk of '+riskAmt.toFixed(2)+' USDT. Raise the leverage to size up fully.')}
+  notional=qty*en;margin=notional/lev}
+ else{margin=cap;notional=cap*lev;qty=notional/en}
+ const liq=en-side*(margin-mmr*notional)/qty/(1-mmr*side);
+ const row=(p,fr)=>{if(!(p>0))return null;const g=(p-en)*side*qty,f1=feeE*notional,f2=fr*qty*p,fe=f1+f2,n=g-fe;return{p,fr,mv:(p-en)/en*100*side,g,f1,f2,fe,n,roe:n/margin*100}};
+ const R={ex:row(ex,feeX),sl:row(sl,feeX),tp:row(tp,feeX)};
+ if(sl>0&&(side>0?sl>=en:sl<=en))W.push('Stop loss price must be '+(side>0?'below':'above')+' the entry price.');
+ if(tp>0&&(side>0?tp<=en:tp>=en))W.push('Target price must be '+(side>0?'above':'below')+' the entry price.');
+ if(sl>0&&(side>0?sl<=liq:sl>=liq))W.push('Your stop loss is beyond the liquidation price. The position would be liquidated before the stop loss triggers.');
+ const risk=sl>0?Math.abs(en-sl):0,rr=risk>0&&tp>0?Math.abs(tp-en)/risk:null;
+ return{notional,qty,liq,R,W,rr,margin,sd,riskAmt,capped}}
+//DOM
+let coins=[],cur=null,side=1;
+const m$=(v,d=2)=>(v>=0?'+':'-')+Math.abs(v).toLocaleString('en-US',{minimumFractionDigits:d,maximumFractionDigits:d}),
+n$=(v,d=2)=>v.toLocaleString('en-US',{minimumFractionDigits:d,maximumFractionDigits:d}),
+pf=p=>+(+p).toPrecision(6);
+function maxLev(){return Math.max(1,cur?cur.ml:50)}
+function sync(){const m=maxLev(),r=$('lev');r.max=m;if(+r.value>m)r.value=m;$('lv').textContent=r.value+'x'+(cur?' (max for '+cur.n+': '+cur.ml+'x)':'')}
+function render(){
+ sync();const I={cap:+$('cap').value,lev:+$('lev').value,en:+$('en').value,ex:+$('ex').value,sl:+$('sl').value,tp:+$('tp').value,feeE:(+$('fee').value||0)/100,feeX:(+$('fx').value||0)/100,side,ml:cur?cur.ml:20,sd:cur?cur.sd:4,mode,rp:+$('rp').value||0};
+ const res=$('res'),ws=$('ws');
+ if(!(I.cap>0&&I.en>0)){res.style.display='none';ws.innerHTML='';return}
+ const C=compute(I);ws.innerHTML=(C.need?[C.need]:C.W).map(w=>`<div class="w">${w}</div>`).join('');
+ if(C.need){res.innerHTML='<div><span>Risk amount ('+I.rp+'% of capital)</span><span class="r">'+n$(C.riskAmt)+' USDT</span></div>';res.style.display='block';return}
+ const cl=v=>v>=0?'g':'r',eL=side>0?'Buy':'Sell',xL=side>0?'Sell':'Buy',
+ L=(t,v,c)=>`<div><span>${t}</span><span class="${c||''}">${v}</span></div>`,
+ pl=(t,r)=>r?`<h3>${t} @ ${pf(r.p)} (${r.mv>=0?'+':''}${r.mv.toFixed(2)}% price move)</h3>`+L('Gross PnL',m$(r.g)+' USDT',cl(r.g))+L('Entry fee ('+eL+', '+(I.feeE*100).toFixed(3)+'%)','-'+n$(r.f1,3)+' USDT')+L('Exit fee ('+xL+', '+(r.fr*100).toFixed(3)+'%)','-'+n$(r.f2,3)+' USDT')+L('Total fees (both sides)','-'+n$(r.fe,3)+' USDT')+L('<b>Net PnL</b>','<b>'+m$(r.n)+' USDT</b>',cl(r.n))+L('ROE (on margin)',(r.roe>=0?'+':'')+r.roe.toFixed(1)+'%',cl(r.roe)):'';
+ let h=(mode==='risk'?L('Risk amount ('+I.rp+'% of capital)',n$(C.riskAmt)+' USDT','r')+L('<b>Quantity</b>','<b>'+n$(C.qty,Math.min(I.sd,6))+' '+(cur?cur.n:'coin')+'</b>')+L('Margin required',n$(C.margin)+' USDT ('+(C.margin/I.cap*100).toFixed(1)+'% of capital)'):'')+L('Position size',n$(C.notional)+' USDT ('+n$(C.qty,Math.min(I.sd,6))+' '+(cur?cur.n:'coin')+')')+L('Liquidation price (estimate)',C.liq>0?pf(C.liq):'-','r');
+ h+=pl('If you exit',C.R.ex)+pl('If stop loss hits',C.R.sl)+pl('If target hits',C.R.tp);
+ if(C.R.sl)h+=L('Max loss at stop loss',(Math.abs(C.R.sl.n)/I.cap*100).toFixed(1)+'% of capital','r');
+ if(C.rr)h+=L('Risk : Reward','1 : '+C.rr.toFixed(2));
+ res.innerHTML=h;res.style.display='block'}
+const AL={};[['us100','xyz100','ustech','nas100','tech100','nasdaq','us100'],['us500','spx','sp500','spx500','us500'],['gold','xau','gold'],['silver','xag','silver']].forEach(g=>g.slice(0,-1).concat(g[g.length-1]).forEach(k=>AL[k]=g.filter((v,i)=>i>0||true)));
+const norm=s=>s.toLowerCase().replace(/^k(?=[a-z])/,'');
+function matchCoin(n,q){q=q.toLowerCase().replace(/[\s_-]/g,'');if(!q)return true;const t=AL[q]||[norm(q)],nm=n.toLowerCase().replace(/[\s_-]/g,''),nn=norm(n);return t.some(x=>nm.includes(x)||nn.includes(x))}
+async function load(){let all=[];
+ const get=async dex=>{const r=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(dex?{type:'metaAndAssetCtxs',dex}:{type:'metaAndAssetCtxs'})}),[m,c]=await r.json();
+  return m.universe.map((u,i)=>({n:u.name,ml:u.maxLeverage,sd:u.szDecimals,px:+c[i].markPx,v:+c[i].dayNtlVlm,d:u.isDelisted,h3:!!dex}))};
+ try{all=await get()}catch(e){$('cs').placeholder='Coin list failed to load (enter prices manually)'}
+ try{const r=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({type:'perpDexs'})}),dx=(await r.json()).filter(d=>d&&d.name).map(d=>d.name);
+  const res=await Promise.all(dx.map(d=>get(d).catch(()=>[])));res.forEach(a=>all=all.concat(a))}catch(e){}
+ coins=all.filter(x=>!x.d&&x.px>0).sort((a,b)=>b.v-a.v);$('cs').placeholder='Search coin or index (e.g. btc, us100, gold)'}
+function showList(){const q=$('cs').value.trim(),m=coins.filter(x=>matchCoin(x.n,q)).slice(0,25),el=$('cr');
+ if(!coins.length||!m.length){el.style.display='none';return}
+ el.innerHTML=m.map(x=>`<div data-n="${x.n}">${x.n}<small>${x.h3?'HIP-3 &middot; ':''}${pf(x.px)} &middot; max ${x.ml}x</small></div>`).join('');el.style.display='block'}
+let feeT=false;
+function pick(n){const old=cur;cur=coins.find(x=>x.n===n);$('cs').value=n;$('cr').style.display='none';
+ const c=$('chip');c.style.display='block';c.innerHTML=`<b>${n}</b>${cur.h3?' (HIP-3 market)':''} &middot; mark price ${pf(cur.px)} &middot; max leverage ${cur.ml}x${cur.h3?'<br><small style="color:var(--y)">HIP-3 markets use isolated margin only and fees are higher than crypto. The fee boxes were set to 0.0675% entry + 0.0225% exit (0.09% total). Edit them if your rates differ.</small>':''}<br><button id="fill">Use this price as entry</button>`;
+ $('fill').onclick=()=>{$('en').value=pf(cur.px);render()};
+ if(!old||old.n!==n){$('en').value=pf(cur.px);['ex','sl','tp'].forEach(i=>$(i).value='')}
+ if(!feeT){$('fee').value=cur.h3?'0.0675':'0.045';$('fx').value=cur.h3?'0.0225':'0.015'};render()}
+$('cs').oninput=showList;$('cs').onfocus=showList;
+$('cr').onclick=e=>{const d=e.target.closest('div[data-n]');if(d)pick(d.dataset.n)};
+document.querySelectorAll('.lv button').forEach(b=>b.onclick=()=>{$('lev').value=b.dataset.l==='max'?maxLev():Math.min(+b.dataset.l,maxLev());render()});
+$('bL').onclick=()=>{side=1;$('bL').className='on';$('bS').className='';render()};
+$('bS').onclick=()=>{side=-1;$('bS').className='on';$('bL').className='';render()};
+let mode='margin';
+function setMode(m){mode=m;$('mM').className=m==='margin'?'on':'';$('mR').className=m==='risk'?'on':'';$('rk').style.display=m==='risk'?'block':'none';$('capl').textContent=m==='risk'?'Total capital (USDT)':'Capital / margin (USDT)';render()}
+$('mM').onclick=()=>setMode('margin');$('mR').onclick=()=>setMode('risk');
+document.querySelectorAll('button[data-r]').forEach(b=>b.onclick=()=>{$('rp').value=b.dataset.r;render()});
+['lev','cap','fee','fx','en','ex','sl','tp','rp'].forEach(i=>$(i).oninput=render);['fee','fx'].forEach(i=>$(i).addEventListener('input',()=>feeT=true));
+document.querySelectorAll('button[data-q]').forEach(b=>b.onclick=()=>{$('cs').value=b.dataset.q;showList();$('cs').focus()});
+load();render();
+</script></body></html>
